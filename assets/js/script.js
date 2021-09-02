@@ -9,6 +9,7 @@ var bButton = document.getElementById("option-b");
 var cButton = document.getElementById("option-c");
 var dButton = document.getElementById("option-d");
 var saveScoreButton = document.getElementById("save-score-button");
+var highScoreAreaEl = document.getElementById("high-score-area");
 
 var secondsLeft = 60;
 var score = 0;
@@ -204,16 +205,22 @@ function setTime() {
     }
   }
 saveScoreButton.onclick = function() {
-  console.log("saving");
   var previousScores = JSON.parse(localStorage.getItem("scores"));
   if(previousScores == null) previousScores = [];
   var initials = document.getElementById("initials").value;
-  var score = score;
+  var playerScore = score;
   var highscore = {
       "initials": initials,
-      "score": score
+      "score": playerScore
   };
+  console.log(previousScores);
   localStorage.setItem("highscore", JSON.stringify(highscore));
   previousScores.push(highscore);
   localStorage.setItem("scores", JSON.stringify(previousScores));
+  console.log("saving");
+  previousScores.sort((a,b) => (a.score > b.score) ? 1 : -1);
+
+  for (let i = 0; i < previousScores.length; i++) {
+    highScoreAreaEl.textContent += ("Initials: " + previousScores[i].initials + ", Score: " + previousScores[i].score + "\n")
+  }
 }
